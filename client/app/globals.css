@@ -1,0 +1,100 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.nav-btn {
+  background-color: #fff5f0;
+  color: #d74000;
+  padding: 0.6rem 2.5rem;
+  font-size: 1.05rem;
+  border-radius: 9999px;
+  white-space: nowrap;
+  transition: background-color 0.2s ease;
+}
+
+.nav-btn:hover {
+  background-color: #ffe4d6;
+}
+
+/* ===== HERO BACKGROUND ===== */
+.hero-section {
+  min-height: 100vh;
+  background-image: url("/images/welcome-bg.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===== WHITE OVERLAY CARD ===== */
+.hero-card {
+  background-color: #ffffff;
+  padding: 60px 80px;
+  text-align: center;
+  max-width: 600px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+}
+
+/* ===== WELCOME TEXT ===== */
+.hero-title {
+  font-size: 64px;
+  letter-spacing: 6px;
+  color: #8b2c1f;
+  margin-bottom: 30px;
+
+  text-shadow:
+    3px 3px 0 #cfa28a,
+    6px 6px 0 rgba(0, 0, 0, 0.2);
+}
+
+/* ===== SUBTEXT ===== */
+.hero-text {
+  font-size: 16px;
+  font-style: italic;
+  color: #3a2a22;
+  margin-bottom: 10px;
+}
+
+/* ===== BUTTON ===== */
+.hero-btn {
+  margin-top: 30px;
+  padding: 12px 30px;
+  background-color: #8b2c1f;
+  color: #fff;
+  border: none;
+  font-size: 14px;
+  letter-spacing: 1px;
+  cursor: pointer;
+
+  transform: skew(-10deg);
+}
+
+.hero-btn:hover {
+  background-color: #6f2218;
+}
