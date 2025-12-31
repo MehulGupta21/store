@@ -98,3 +98,14 @@ body {
 .hero-btn:hover {
   background-color: #6f2218;
 }
+
+.nav-icon {
+  width: 24px;
+  height: 24px;
+  color: #e2724f;
+  transition: transform 0.2s ease;
+}
+
+.nav-icon:hover {
+  transform: scale(1.1);
+}
