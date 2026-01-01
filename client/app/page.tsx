@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Home() {
   return (
     <main>
@@ -12,7 +14,9 @@ export default function Home() {
             "Not ordinary. Originated."
           </p>
 
-          <button className="hero-btn">Start Now</button>
+          <Link href="/shop">
+            <button className="hero-btn">Start Now</button>
+          </Link>
         </div>
       </section>
     </main>
