@@ -151,10 +151,10 @@ body {
 
 /* ================== PRODUCT CARDS ================== */
 .product-card {
-  text-align: left;
+  display: block;
+  text-decoration: none;
+  color: inherit;
   cursor: pointer;
-  background: #faf7f4;
-  padding-bottom: 12px;
 }
 
 .product-image-wrapper {
@@ -336,3 +336,249 @@ footer .border-t {
   }
 }
 
+/* ================= PRODUCT PAGE ================= */
+
+.product-page {
+  background: #fffaf7;
+  padding: 4rem 2rem;
+}
+
+/* MAIN LAYOUT */
+.product-wrapper {
+  max-width: 1200px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: 1.3fr 1fr; /* LEFT bigger */
+  gap: 3rem;
+  align-items: flex-start;
+}
+
+/* ---------------- LEFT SIDE (IMAGES) ---------------- */
+
+.product-images {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+}
+
+.thumbnail-column {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  flex-shrink: 0;
+}
+
+.thumbnail-column img {
+  width: 70px;
+  height: auto;
+  border: 1px solid #c96a3a;
+  padding: 4px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.main-image {
+  flex: 1;               /* 🔥 THIS FIXES EMPTY SPACE */
+  display: flex;
+  justify-content: center;
+}
+
+.main-image img {
+  width: 100%;
+  max-width: 420px;
+  height: auto;
+  border: 1px solid #c96a3a;
+  background: #fff;
+}
+
+/* ---------------- RIGHT SIDE (INFO) ---------------- */
+
+.product-info {
+  width: 100%;
+}
+
+.product-info h1 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.product-info .price {
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+}
+
+.quantity {
+  margin-bottom: 1.5rem;
+}
+
+.qty-box {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border: 1px solid #c96a3a;
+  width: fit-content;
+  padding: 0.4rem 0.8rem;
+}
+
+.qty-box button {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+/* BUTTONS */
+.outline-btn {
+  border: 1px solid #9b3f1c;
+  background: transparent;
+  padding: 0.7rem 2rem;
+  margin-bottom: 1.2rem;
+  cursor: pointer;
+}
+
+.primary-btn {
+  width: 100%;
+  background: #8b0000;
+  color: white;
+  border-radius: 999px;
+  padding: 0.8rem;
+  margin-bottom: 0.8rem;
+  cursor: pointer;
+}
+
+.secondary-btn {
+  width: 100%;
+  background: #a00000;
+  color: white;
+  border-radius: 999px;
+  padding: 0.8rem;
+  cursor: pointer;
+}
+
+/* ---------------- MOBILE ---------------- */
+
+@media (max-width: 768px) {
+  .product-wrapper {
+    grid-template-columns: 1fr;
+  }
+
+  .product-images {
+    flex-direction: column-reverse;
+    align-items: center;
+  }
+
+  .thumbnail-column {
+    flex-direction: row;
+  }
+
+  .main-image img {
+    max-width: 90%;
+  }
+}
+
+.cart-page {
+  max-width: 900px;
+  margin: auto;
+  padding: 4rem 2rem;
+}
+
+.cart-item {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.cart-item img {
+  width: 120px;
+  border: 1px solid #ccc;
+}
+
+.cart-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: #8b0000;
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 999px;
+  padding: 2px 6px;
+  line-height: 1;
+}
+
+.nav-icon-btn {
+  position: relative;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* ===== PRODUCT PAGE LAYOUT ===== */
+
+.product-page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 60px 24px;
+}
+
+.product-gallery {
+  display: grid;
+  grid-template-columns: 80px 420px 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+/* Thumbnails */
+.thumbnail-column {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.thumbnail {
+  width: 64px;
+  height: 96px;
+  border: 1px solid #e5e5e5;
+  cursor: pointer;
+  overflow: hidden;
+  background: #fff;
+}
+
+.thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.thumbnail.active {
+  border: 1px solid #c40000;
+}
+
+/* Main image (FIXED SIZE) */
+.main-image-wrapper {
+  width: 420px;
+  height: 620px;
+  border: 1px solid #ddd;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.main-image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  cursor: zoom-in;
+}
+
+/* Right column */
+.product-info {
+  padding-top: 16px;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}

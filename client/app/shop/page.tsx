@@ -1,26 +1,36 @@
+import Link from "next/link";
+
 export default function Shop() {
   const products = [
     {
+      id : 1,
       name: "Indo-Western Saree",
       price: "₹5,000",
+      slug: "indo-western-saree",
       img1: "/images/p1-1.jpg",
       img2: "/images/p1-2.jpg",
     },
     {
+      id : 2,
       name: "Dazzling Shimmery Lehenga",
       price: "₹8,000",
+      slug: "dazzling-shimmery-lehenga",
       img1: "/images/p2-1.jpg",
       img2: "/images/p2-2.jpg",
     },
     {
+      id: 3,
       name: "Sequence Blouse with Lehenga",
       price: "₹4,000",
+      slug: "sequence-blouse-with-lehenga",
       img1: "/images/p3-1.jpg",
       img2: "/images/p3-2.jpg",
     },
     {
+      id: 4,
       name: "Customised Saree",
       price: "₹5,000",
+      slug: "customised-saree",
       img1: "/images/p4-1.jpeg",
       img2: "/images/p4-2.jpg",
     },
@@ -75,8 +85,12 @@ export default function Shop() {
         {/* PRODUCTS GRID */}
         <section className="md:col-span-3">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {products.map((p, i) => (
-              <div key={i} className="product-card">
+            {products.map((p) => (
+              <Link
+                key={p.slug}
+                href={`/shop/${p.slug}`}
+                className="product-card"
+              >
                 <div className="product-image-wrapper">
                   <img
                     src={p.img1}
@@ -89,10 +103,9 @@ export default function Shop() {
                     className="product-img secondary-img"
                   />
                 </div>
-
-                <h4 className="text-sm mt-3">{p.name}</h4>
-                <p className="text-sm text-gray-600">{p.price}</p>
-              </div>
+                <h4>{p.name}</h4>
+                <p>{p.price}</p>
+              </Link>
             ))}
           </div>
         </section>
