@@ -4,6 +4,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { ShoppingBag, User } from "lucide-react";
 import { useCart } from "@/app/lib/cart-context";
+import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+
 
 export default function Navbar() {
   const { cart, openCart } = useCart();
@@ -16,7 +18,13 @@ export default function Navbar() {
         
         {/* LOGO */}
         <Link href="/" className="flex items-center gap-2">
-          <Image src="/images/logo.jpg" alt="Logo" width={120} height={40} />
+          <Image
+            src="/images/logo.jpg"
+            alt="Logo"
+            width={300}
+            height={120}
+            className="h-14 w-auto md:h-16"
+          />
         </Link>
 
         {/* NAV LINKS */}
@@ -47,9 +55,27 @@ export default function Navbar() {
           </button>
 
           {/* USER */}
-          <Link href="/sign-in">
-            <User size={24} color="#e2724f"/>
-          </Link>
+          <div className="flex items-center gap-4">
+            {/* When user is signed in */}
+            <SignedIn>
+              <UserButton
+                afterSignOutUrl="/"
+                appearance={{
+                elements: {
+                avatarBox: "w-9 h-9",
+                },
+              }}
+              />
+            </SignedIn>
+
+            {/* When user is signed out */}
+             <SignedOut>
+              <Link href="/sign-in" className="nav-btn">
+                Sign In
+              </Link>
+            </SignedOut>
+          </div>
+
         </div>
       </div>
     </nav>
