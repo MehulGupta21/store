@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useState, useRef } from "react";
-import { useCart } from "@/app/lib/cart-context";
+import { useCart } from "@/app/providers/CartProvider";
 import { Facebook, Instagram, Linkedin, Share2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -25,18 +25,31 @@ export default function ProductUI({ product }: { product: Product }) {
 
   /* ---------------- ZOOM TRACKING ---------------- */
   const handleMove = (e: React.MouseEvent) => {
-    const rect = imgRef.current!.getBoundingClientRect();
+    if (!imgRef.current) return;
+    const rect = imgRef.current.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width) * 100;
     const y = ((e.clientY - rect.top) / rect.height) * 100;
     setPos({ x, y });
   };
 
-  /* ---------------- MOBILE TAP ZOOM ---------------- */
-  const toggleZoom = () => setZoom(!zoom);
+  const handleAddToCart = () => {
+    // add product qty times (CartProvider handles quantity internally)
+    for (let i = 0; i < qty; i++) {
+      addToCart({
+        id: product.slug,          // ✅ using slug as id
+        slug: product.slug,
+        name: product.name,
+        price: product.price,
+        image: product.images[0],
+      });
+    }
+    openCart();
+  };
 
   return (
     <section className="max-w-6xl mx-auto px-6 py-16">
       <div className="grid grid-cols-[80px_420px_1fr] gap-10 items-start">
+
         {/* THUMBNAILS */}
         <div className="flex flex-col gap-3">
           {product.images.map((img, i) => (
@@ -48,7 +61,7 @@ export default function ProductUI({ product }: { product: Product }) {
                 active === i ? "border-red-600" : "border-gray-300"
               }`}
             >
-              <Image src={img} alt="" width={60} height={80} />
+              <Image src={img} alt={product.name} width={60} height={80} />
             </button>
           ))}
         </div>
@@ -60,18 +73,16 @@ export default function ProductUI({ product }: { product: Product }) {
           onMouseEnter={() => setZoom(true)}
           onMouseLeave={() => setZoom(false)}
           onMouseMove={handleMove}
-          onClick={toggleZoom}
+          onClick={() => setZoom(!zoom)}
         >
           <Image
-            key={product.images[active]}
             src={product.images[active]}
             alt={product.name}
             fill
-            className="object-contain fade-img"
+            className="object-contain"
             priority
           />
 
-          {/* ZOOM LENS */}
           {zoom && (
             <div
               className="absolute inset-0 pointer-events-none"
@@ -88,17 +99,23 @@ export default function ProductUI({ product }: { product: Product }) {
         {/* PRODUCT INFO */}
         <div>
           <h1 className="text-2xl font-medium mb-2">{product.name}</h1>
-          <p className="text-lg mb-4">₹{product.price}</p>
+          <p className="text-lg mb-6">₹{product.price}</p>
 
           {/* Quantity */}
           <div className="mb-6">
             <p className="text-sm mb-1">Quantity *</p>
             <div className="inline-flex border">
-              <button onClick={() => setQty(Math.max(1, qty - 1))} className="px-3">
+              <button
+                onClick={() => setQty((q) => Math.max(1, q - 1))}
+                className="px-3"
+              >
                 −
               </button>
               <span className="px-4">{qty}</span>
-              <button onClick={() => setQty(qty + 1)} className="px-3">
+              <button
+                onClick={() => setQty((q) => q + 1)}
+                className="px-3"
+              >
                 +
               </button>
             </div>
@@ -107,16 +124,7 @@ export default function ProductUI({ product }: { product: Product }) {
           {/* Buttons */}
           <div className="space-y-4">
             <button
-              onClick={() => {
-                addToCart({
-                  slug: product.slug,
-                  name: product.name,
-                  price: product.price,
-                  image: product.images[0],
-                  quantity: qty,
-                });
-                openCart();
-              }}
+              onClick={handleAddToCart}
               className="w-full bg-red-600 text-white py-3 rounded-full"
             >
               Book Now

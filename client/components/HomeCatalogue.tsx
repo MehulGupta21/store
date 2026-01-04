@@ -1,7 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { useCart } from "@/app/lib/cart-context";
+import { useCart } from "@/app/providers/CartProvider";
+
 
 const products = [
   {
@@ -55,11 +56,12 @@ export default function HomeCatalogue() {
             <button
               onClick={() =>
                 addToCart({
-                  slug: p.slug,
-                  name: p.name,
-                  price: p.price,
-                  image: p.img1,
-                  quantity: 1,
+                    id : p.slug,
+                    slug: p.slug,
+                    name: p.name,
+                    price: p.price,
+                    image: p.img1,
+                //   quantity: 1,
                 })
               }
             >
