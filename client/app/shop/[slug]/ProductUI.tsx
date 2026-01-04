@@ -69,7 +69,7 @@ export default function ProductUI({ product }: { product: Product }) {
         {/* MAIN IMAGE */}
         <div
           ref={imgRef}
-          className="relative w-[420px] h-[560px] border bg-white overflow-hidden"
+          className="relative w-105 h-140 border bg-white overflow-hidden"
           onMouseEnter={() => setZoom(true)}
           onMouseLeave={() => setZoom(false)}
           onMouseMove={handleMove}
@@ -109,7 +109,6 @@ export default function ProductUI({ product }: { product: Product }) {
                 onClick={() => setQty((q) => Math.max(1, q - 1))}
                 className="px-3"
               >
-                −
               </button>
               <span className="px-4">{qty}</span>
               <button
