@@ -2,15 +2,18 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { ShoppingBag, User } from "lucide-react";
-import { useCart } from "@/app/lib/cart-context";
+import { ShoppingBag } from "lucide-react";
+import { useCart } from "@/app/providers/CartProvider";
 import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 
-
 export default function Navbar() {
-  const { cart, openCart } = useCart();
+  const { cartItems = [], openCart } = useCart();
 
-  const totalQty = cart.reduce((sum, item) => sum + item.quantity, 0);
+  // ✅ Safe reduce (never crashes)
+  const totalQty = cartItems.reduce(
+    (sum, item) => sum + item.quantity,
+    0
+  );
 
   return (
     <nav className="border-b bg-white">
@@ -20,10 +23,11 @@ export default function Navbar() {
         <Link href="/" className="flex items-center gap-2">
           <Image
             src="/images/logo.jpg"
-            alt="Logo"
+            alt="Adhanya Creations Logo"
             width={300}
             height={120}
             className="h-14 w-auto md:h-16"
+            priority
           />
         </Link>
 
@@ -31,8 +35,8 @@ export default function Navbar() {
         <div className="hidden md:flex gap-6">
           <Link href="/" className="nav-btn">Home</Link>
           <Link href="/shop" className="nav-btn">Shop</Link>
-          <Link href="/Design" className="nav-btn">Design</Link>
-          <Link href="/Studio" className="nav-btn">Studio</Link>
+          <Link href="/design" className="nav-btn">Design</Link>
+          <Link href="/studio" className="nav-btn">Studio</Link>
         </div>
 
         {/* ICONS */}
@@ -43,9 +47,8 @@ export default function Navbar() {
             onClick={openCart}
             className="relative"
             aria-label="Open cart"
-            color="#e2724f"
           >
-            <ShoppingBag size={24} color="#e2724f"/>
+            <ShoppingBag size={24} color="#e2724f" />
 
             {totalQty > 0 && (
               <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
@@ -54,22 +57,20 @@ export default function Navbar() {
             )}
           </button>
 
-          {/* USER */}
+          {/* USER AUTH */}
           <div className="flex items-center gap-4">
-            {/* When user is signed in */}
             <SignedIn>
               <UserButton
                 afterSignOutUrl="/"
                 appearance={{
-                elements: {
-                avatarBox: "w-9 h-9",
-                },
-              }}
+                  elements: {
+                    avatarBox: "w-9 h-9",
+                  },
+                }}
               />
             </SignedIn>
 
-            {/* When user is signed out */}
-             <SignedOut>
+            <SignedOut>
               <Link href="/sign-in" className="nav-btn">
                 Sign In
               </Link>

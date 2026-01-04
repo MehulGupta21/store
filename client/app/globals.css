@@ -886,3 +886,6 @@ img {
   font-size: 14px;
 }
 
+.input {
+  @apply w-full border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-black;
+}

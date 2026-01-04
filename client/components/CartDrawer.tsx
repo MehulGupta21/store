@@ -1,114 +1,106 @@
 "use client";
 
 import Image from "next/image";
-import { X, Trash2 } from "lucide-react";
-import { useCart } from "@/app/lib/cart-context";
+import Link from "next/link";
+import { Minus, Plus, Trash2, X } from "lucide-react";
+import { useCart } from "@/app/providers/CartProvider";
 
 export default function CartDrawer() {
   const {
-    cart,
-    isOpen,
-    closeCart,
+    cartItems,
+    updateQuantity,
     removeFromCart,
-    updateQty,
+    isCartOpen,
+    closeCart,
   } = useCart();
 
-  const total = cart.reduce(
+  if (!isCartOpen) return null;
+
+  const total = cartItems.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0
   );
 
-  if (!isOpen) return null;
-
   return (
     <div className="fixed inset-0 z-50">
-      
-      {/* OVERLAY */}
       <div
         className="absolute inset-0 bg-black/40"
         onClick={closeCart}
       />
 
-      {/* DRAWER */}
-      <div className="absolute right-0 top-0 h-full w-[360px] bg-white p-5 overflow-y-auto">
-        
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-lg font-semibold">
-            Cart ({cart.length})
-          </h2>
+      <div className="absolute right-0 top-0 h-full w-96 bg-white p-6 flex flex-col">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-xl font-semibold">Cart</h2>
           <button onClick={closeCart}>
             <X />
           </button>
         </div>
 
-        {cart.length === 0 && (
-          <p className="text-gray-500">Your cart is empty</p>
-        )}
+        <div className="flex-1 overflow-y-auto space-y-6">
+          {cartItems.map((item) => (
+            <div key={item.id} className="flex gap-4">
+              <Image
+                src={item.image}
+                alt={item.name}
+                width={70}
+                height={90}
+                className="rounded object-cover"
+              />
 
-        {cart.map((item) => (
-          <div
-            key={item.slug}
-            className="flex gap-4 border-b py-4"
-          >
-            <Image
-              src={item.image}
-              alt={item.name}
-              width={70}
-              height={90}
-            />
-
-            <div className="flex-1">
-              <p className="font-medium">{item.name}</p>
-              <p className="text-sm text-gray-600">₹{item.price}</p>
-
-              {/* QTY */}
-              <div className="flex items-center gap-2 mt-2">
-                <button
-                  onClick={() =>
-                    updateQty(item.slug, item.quantity - 1)
-                  }
-                  className="border px-2"
+              <div className="flex-1">
+                <Link
+                  href={`/shop/${item.slug}`}
+                  className="font-medium"
                 >
-                  −
-                </button>
-                <span>{item.quantity}</span>
+                  {item.name}
+                </Link>
+
+                <div className="flex items-center gap-3 mt-2">
+                  <button
+                    onClick={() =>
+                      updateQuantity(item.id, item.quantity - 1)
+                    }
+                  >
+                    <Minus size={16} />
+                  </button>
+
+                  <span>{item.quantity}</span>
+
+                  <button
+                    onClick={() =>
+                      updateQuantity(item.id, item.quantity + 1)
+                    }
+                  >
+                    <Plus size={16} />
+                  </button>
+                </div>
+              </div>
+
+              <div className="flex flex-col items-end gap-2">
+                <p>₹{item.price * item.quantity}</p>
                 <button
-                  onClick={() =>
-                    updateQty(item.slug, item.quantity + 1)
-                  }
-                  className="border px-2"
+                  onClick={() => removeFromCart(item.id)}
+                  className="text-red-600"
                 >
-                  +
+                  <Trash2 size={16} />
                 </button>
               </div>
             </div>
+          ))}
+        </div>
 
-            <button onClick={() => removeFromCart(item.slug)}>
-              <Trash2 size={18} />
-            </button>
+        <div className="border-t pt-4">
+          <div className="flex justify-between font-semibold mb-4">
+            <span>Total</span>
+            <span>₹{total}</span>
           </div>
-        ))}
 
-        {/* TOTAL */}
-        {cart.length > 0 && (
-          <div className="mt-6">
-            <div className="flex justify-between font-semibold mb-4">
-              <span>Total</span>
-              <span>₹{total}</span>
-            </div>
-
-            <button className="w-full bg-[#8b1e1e] text-white py-3 rounded mb-2">
+          <Link href="/checkout" onClick={closeCart}>
+            <button className="w-full bg-black text-white py-3 rounded-lg">
               Checkout
             </button>
-
-            <button
-              onClick={closeCart}
-              className="w-full border py-3 rounded"
-            >
-              Continue Shopping
-            </button>
-          </div>
-        )}
+          </Link>
+        </div>
       </div>
     </div>
   );

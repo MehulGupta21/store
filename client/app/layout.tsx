@@ -1,9 +1,10 @@
 import "./globals.css";
+
+import { ClerkProvider } from "@clerk/nextjs";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { CartProvider } from "@/app/lib/cart-context";
 import CartDrawer from "@/components/CartDrawer";
-import { ClerkProvider, SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs'
+import { CartProvider } from "@/app/providers/CartProvider";
 
 export default function RootLayout({
   children,
@@ -11,17 +12,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <ClerkProvider>
     <html lang="en">
       <body>
-        <CartProvider>
-          <Navbar />
-          <CartDrawer />
-          {children}
-          <Footer />
-        </CartProvider>
+        <ClerkProvider>
+          <CartProvider>
+            <Navbar />
+            <CartDrawer />
+            {children}
+            <Footer />
+          </CartProvider>
+        </ClerkProvider>
       </body>
     </html>
-    </ClerkProvider>
   );
 }
