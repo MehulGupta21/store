@@ -100,7 +100,7 @@ export default function ShopPage() {
                 alt={product.name}
                 width={350}
                 height={460}
-                className="w-full h-[420px] object-cover transition-opacity duration-300 group-hover:opacity-0"
+                className="w-full h-105 object-cover transition-opacity duration-300 group-hover:opacity-0"
               />
 
               {product.images[1] && (
@@ -109,7 +109,7 @@ export default function ShopPage() {
                   alt={product.name}
                   width={350}
                   height={460}
-                  className="absolute inset-0 w-full h-[420px] object-cover opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                  className="absolute inset-0 w-full h-105 object-cover opacity-0 transition-opacity duration-300 group-hover:opacity-100"
                 />
               )}
 
@@ -160,12 +160,12 @@ export default function ShopPage() {
               {/* IMAGE GALLERY */}
               <div className="flex gap-4">
                 {/* THUMBNAILS */}
-                <div className="flex md:flex-col gap-3 overflow-auto max-h-[420px]">
+                <div className="flex md:flex-col gap-3 overflow-auto max-h-105">
                   {quickView.images.map((img: string, idx: number) => (
                     <button
                       key={idx}
                       onClick={() => setActiveImage(idx)}
-                      className={`border rounded-lg overflow-hidden w-20 h-24 flex-shrink-0 ${
+                      className={`border rounded-lg overflow-hidden w-20 h-24 shrink-0 ${
                         activeImage === idx
                           ? "border-black"
                           : "border-gray-200"
@@ -189,7 +189,7 @@ export default function ShopPage() {
                     alt={quickView.name}
                     width={420}
                     height={540}
-                    className="rounded-xl object-cover w-full h-[420px]"
+                    className="rounded-xl object-cover w-full h-105"
                   />
                 </div>
               </div>
