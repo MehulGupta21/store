@@ -199,3 +199,6 @@ export const products: Product[] = [
     inStock: true,
   },
 ];
+
+export default products;
+

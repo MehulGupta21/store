@@ -1,8 +1,19 @@
-const Footer = () => {
-  return (
-    <footer className="bg-white border-t border-[#e8c1a9] mt-24">
-      <div className="max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-3 gap-10">
+"use client";
 
+import { usePathname } from "next/navigation";
+
+const Footer = () => {
+  const pathname = usePathname();
+
+  const isDesignPage = pathname === "/Design";
+
+  return (
+    <footer
+      className={`bg-white border-t border-[#e8c1a9] ${
+        isDesignPage ? "mt-0" : "mt-24"
+      }`}
+    >
+      <div className="max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-3 gap-10">
         {/* Brand */}
         <div>
           <h3 className="text-xl font-semibold mb-3">
@@ -23,10 +34,9 @@ const Footer = () => {
       </div>
 
       {/* Bottom */}
-      <div className="border-t border-gray-200 py-6 text-sm">
-        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div className="border-t border-gray-200">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex flex-col md:flex-row items-center justify-between gap-4">
           <p>© 2035 by Adhanya Creations</p>
-
           <div className="flex gap-4">
             <a href="#">Privacy Policy</a>
             <a href="#">Terms</a>
