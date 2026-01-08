@@ -88,6 +88,13 @@ plain light background,
 realistic fabric texture,
 luxury Indian fashion editorial.
 
+STRICT RULES:
+- Do NOT change the model's face, body, pose, or skin.
+- Do NOT change lighting, background, or camera.
+- Keep catalogue-quality realism.
+- Indian luxury fashion e-commerce style.
+
+
 Outfit: ${style}.
 Fabric: ${fabric ?? "premium fabric"}.
 Design details: ${addons.length ? addons.join(", ") : "minimal elegant design"}.
