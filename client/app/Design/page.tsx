@@ -358,6 +358,10 @@ export default function DesignPage() {
           <button className="mt-4 w-full bg-[#e26a4f] text-white py-2 rounded-lg">
             Add to Cart
           </button>
+
+          <p className="text-xs text-center mt-3">
+            Free alterations within 30 days • 100% satisfaction guaranteed
+          </p>
         </div>
       </aside>
     </div>
