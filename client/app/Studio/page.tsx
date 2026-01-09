@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Check } from "lucide-react";
 import { Heart, X } from "lucide-react";
 
@@ -45,6 +45,15 @@ const budgets = [
   { id: "premium", label: "Premium", range: "₹15,000 - ₹25,000" },
   { id: "luxury", label: "Luxury", range: "₹25,000+" },
 ];
+// category: "saree" | "lehenga" | "custom" | "suit" | "gown" | "co-ord" | "anarkali";
+const clothingStyles = [
+  { id: "saree", label: "Saree", range: "₹1,000 - ₹5,000" },
+  { id: "lehenga", label: "Lehenga", range: "₹5,000 - ₹15,000" },
+  { id: "suit", label: "Suit", range: "₹15,000 - ₹25,000" },
+  { id: "gown", label: "Gown", range: "₹25,000+" },
+  { id: "co-ord", label: "Co-Ord", range: "₹5,000 - ₹15,000" },
+  { id: "anarkali", label: "Anarkali", range: "₹5,000 - ₹15,000" },
+];
 
 export default function StudioPage() {
   const [step, setStep] = useState(1);
@@ -52,6 +61,7 @@ export default function StudioPage() {
   const [style, setStyle] = useState<string | null>(null);
   const [color, setColor] = useState<string | null>(null);
   const [budget, setBudget] = useState<string | null>(null);
+  const [selectedClothingStyle, setSelectedClothingStyle] = useState<string | null>(null);
   const [activeItem, setActiveItem] = useState<OutfitItem | null>(null);
   const [toggleWishlist, isWishlisted] = useState<string | null>(null);
   const [showResults, setShowResults] = useState(false);
@@ -64,11 +74,34 @@ export default function StudioPage() {
     );
   };
 
+
+  const canProceed = () => {
+  switch (step) {
+    case 1:
+      return occasion.length > 0;
+    case 2:
+      return !!style;
+    case 3:
+      return !!color;
+    case 4:
+      return !!budget;
+    case 5:
+      return !!selectedClothingStyle;
+    default:
+      return false;
+  }
+};
+
+const goNext = () => {
+  if (!canProceed()) return;
+  setStep(step + 1);
+};
+
   /* ---------- STEP 2: BUILD SEARCH QUERY ---------- */
   const buildSearchQuery = () => {
     return `Indian ${occasion.join(" ")} ${style ?? ""} ${
       color ?? ""
-    } ${budget ?? ""} outfit`;
+    } ${budget ?? ""} ${selectedClothingStyle ?? ""} outfit for females`;
   };
 
   /* ---------- STEP 2: FETCH RECOMMENDATIONS ---------- */
@@ -85,8 +118,12 @@ export default function StudioPage() {
         }),
       });
 
+      // const data = await res.json();
+      // setResults(data.images || []);
       const data = await res.json();
+      console.log("API DATA:", data);
       setResults(data.images || []);
+
     } catch (err) {
       console.error("Recommendation error:", err);
     } finally {
@@ -167,7 +204,7 @@ export default function StudioPage() {
       {/* STEPS */}
       {!showResults && (
         <div className="flex justify-center gap-4 mb-10">
-          {[1, 2, 3, 4].map((s) => (
+          {[1, 2, 3, 4, 5].map((s) => (
             <div
               key={s}
               className={`w-8 h-8 flex items-center justify-center rounded-full ${
@@ -183,41 +220,48 @@ export default function StudioPage() {
       )}
 
 {showResults && (
-  <div className="max-w-6xl w-full">
+  <div className="max-w-6xl mx-auto px-4">
     <h2 className="text-xl font-semibold mb-6">
       Recommended for You
     </h2>
 
-    {/* Masonry */}
-    <div className="columns-1 sm:columns-2 md:columns-3 gap-6 space-y-6">
-      {results.map((item) => (
-        <div
-          key={item.id}
-          className="break-inside-avoid bg-white rounded-xl overflow-hidden shadow hover:shadow-lg transition relative cursor-pointer"
-        >
+    {loading ? (
+      <p className="text-center">Loading inspiration…</p>
+    ) : (
+      <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-6 space-y-6">
+        {results.map((item) => (
+          <div
+            key={item.id}
+            className="break-inside-avoid bg-white rounded-xl overflow-hidden shadow hover:shadow-lg transition cursor-pointer"
+          >
+            {/* ✅ THIS IS THE FIXED IMG */}
+            <img
+              src={item.image}
+              alt={item.title}
+              loading="lazy"
+              referrerPolicy="no-referrer"
+              className="w-full object-cover rounded-xl"
+              onError={(e) => {
+                e.currentTarget.src = "/images/placeholder.png";
+              }}
+              onClick={() => setActiveItem(item)}
+            />
 
-          {/* Image */}
-          <img
-            src={item.image}
-            alt={item.title}
-            className="w-full object-cover"
-            onClick={() => setActiveItem(item)}
-          />
-
-          {/* Info */}
-          <div className="p-4">
-            <h3 className="font-semibold text-sm line-clamp-2">
-              {item.title}
-            </h3>
-            <p className="text-xs text-gray-500 mt-1">
-              Pinterest inspired
-            </p>
+            <div className="p-4">
+              <h3 className="font-semibold text-sm line-clamp-2">
+                {item.title}
+              </h3>
+              <p className="text-xs text-gray-500 mt-1">
+                Pinterest inspired
+              </p>
+            </div>
           </div>
-        </div>
-      ))}
-    </div>
+        ))}
+      </div>
+    )}
   </div>
 )}
+
 
 
       {/* FORM */}
@@ -292,51 +336,56 @@ export default function StudioPage() {
             </>
           )}
 
+          {step === 5 && (
+            <>
+              <h2 className="title">Clothing Style</h2>
+              <Grid>
+              {clothingStyles.map((c) => (
+                <Option
+                  key={c.id}
+                  active={selectedClothingStyle === c.id}
+                  onClick={() => setSelectedClothingStyle(c.id)}
+                >
+                  {c.label}
+                </Option>
+              ))}
+              </Grid>
+            </>
+          )}
+
           <div className="flex justify-between mt-6">
             <button onClick={() => setStep(step - 1)} className="btn-outline">
               Back
             </button>
 
-            {step < 4 ? (
-              <button onClick={() => setStep(step + 1)} className="btn-primary">
-                Next
-              </button>
-            ) : (
-              <button onClick={fetchRecommendations} className="btn-primary">
-                Get Recommendations
-              </button>
-            )}
+            {step < 5 ? (
+            <button
+              onClick={goNext}
+              disabled={!canProceed()}
+              className={`btn-primary ${
+                !canProceed() ? "opacity-50 cursor-not-allowed" : ""
+              }`}
+            >
+              Next
+            </button>
+              ) : (
+            <button
+              onClick={fetchRecommendations}
+              disabled={!canProceed()}
+              className={`btn-primary ${
+               !canProceed() ? "opacity-50 cursor-not-allowed" : ""
+              }`}
+            >
+              Get Recommendations
+            </button>
+          )}
+
+
           </div>
         </div>
       )}
 
-      {/* RESULTS — PINTEREST STYLE */}
-      {showResults && (
-        <div className="max-w-6xl mx-auto mt-16">
-          <h2 className="text-2xl font-serif mb-6">
-            Recommended for You
-          </h2>
-
-          {loading ? (
-            <p className="text-center">Loading inspiration…</p>
-          ) : (
-            <div className="columns-2 md:columns-3 lg:columns-4 gap-4">
-              {results.map((item, i) => (
-                <div
-                  key={i}
-                  className="mb-4 break-inside-avoid rounded-xl overflow-hidden shadow hover:shadow-lg transition"
-                >
-                  <img
-                    src={item.image}
-                    alt={item.title}
-                    className="w-full rounded-xl"
-                  />
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
+      
 
       <style jsx>{`
         .title {
